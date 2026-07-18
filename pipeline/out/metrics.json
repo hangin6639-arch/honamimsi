@@ -1,0 +1,57 @@
+{
+  "solar_mw": {
+    "LightGBM": {
+      "mape": 32.84,
+      "r2": 0.9089
+    },
+    "XGBoost": {
+      "mape": 32.28,
+      "r2": 0.9085
+    },
+    "best": "LightGBM"
+  },
+  "wind_mw": {
+    "LightGBM": {
+      "mape": 48.8,
+      "r2": 0.8548
+    },
+    "XGBoost": {
+      "mape": 49.28,
+      "r2": 0.8528
+    },
+    "best": "LightGBM"
+  },
+  "demand_mw": {
+    "LightGBM": {
+      "mape": 5.88,
+      "r2": 0.8094
+    },
+    "XGBoost": {
+      "mape": 5.91,
+      "r2": 0.8061
+    },
+    "best": "LightGBM"
+  },
+  "curtail_mwh": {
+    "LightGBM": {
+      "mape": 143.57,
+      "r2": 0.5819
+    },
+    "XGBoost": {
+      "mape": 145.56,
+      "r2": 0.5912
+    },
+    "best": "XGBoost"
+  },
+  "idle_share": {
+    "LightGBM": {
+      "mape": 2.77,
+      "r2": 0.9468
+    },
+    "XGBoost": {
+      "mape": 2.8,
+      "r2": 0.9457
+    },
+    "best": "LightGBM"
+  }
+}

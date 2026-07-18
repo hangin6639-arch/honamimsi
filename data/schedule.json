@@ -1,0 +1,291 @@
+{
+  "meta": {
+    "version": "1.0",
+    "date": "2023-04-16",
+    "ev_count": 500,
+    "model": "LightGBM",
+    "metrics": {
+      "mape": 5.88,
+      "r2": 0.8094,
+      "by_target": {
+        "solar_mw": {
+          "best": "LightGBM",
+          "mape": 32.84,
+          "r2": 0.9089
+        },
+        "wind_mw": {
+          "best": "LightGBM",
+          "mape": 48.8,
+          "r2": 0.8548
+        },
+        "demand_mw": {
+          "best": "LightGBM",
+          "mape": 5.88,
+          "r2": 0.8094
+        },
+        "curtail_mwh": {
+          "best": "XGBoost",
+          "mape": 145.56,
+          "r2": 0.5912
+        },
+        "idle_share": {
+          "best": "LightGBM",
+          "mape": 2.77,
+          "r2": 0.9468
+        }
+      }
+    }
+  },
+  "hourly": [
+    {
+      "hour": 0,
+      "surplus_mw": 0.1,
+      "demand_mw": 664.6,
+      "renewable_mw": 50.0,
+      "charge_mwh": 0.057,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.1,
+      "idle_ev_count": 442
+    },
+    {
+      "hour": 1,
+      "surplus_mw": 0.1,
+      "demand_mw": 640.9,
+      "renewable_mw": 40.2,
+      "charge_mwh": 0.051,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.3,
+      "idle_ev_count": 449
+    },
+    {
+      "hour": 2,
+      "surplus_mw": 0.1,
+      "demand_mw": 624.7,
+      "renewable_mw": 23.3,
+      "charge_mwh": 0.055,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.4,
+      "idle_ev_count": 458
+    },
+    {
+      "hour": 3,
+      "surplus_mw": 0.1,
+      "demand_mw": 607.9,
+      "renewable_mw": 17.8,
+      "charge_mwh": 0.066,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.6,
+      "idle_ev_count": 464
+    },
+    {
+      "hour": 4,
+      "surplus_mw": 0.1,
+      "demand_mw": 610.8,
+      "renewable_mw": 29.3,
+      "charge_mwh": 0.065,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.8,
+      "idle_ev_count": 466
+    },
+    {
+      "hour": 5,
+      "surplus_mw": 0.1,
+      "demand_mw": 614.7,
+      "renewable_mw": 22.7,
+      "charge_mwh": 0.061,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.9,
+      "idle_ev_count": 464
+    },
+    {
+      "hour": 6,
+      "surplus_mw": 0.1,
+      "demand_mw": 621.5,
+      "renewable_mw": 40.1,
+      "charge_mwh": 0.142,
+      "discharge_mwh": 0.0,
+      "soc_pct": 46.3,
+      "idle_ev_count": 442
+    },
+    {
+      "hour": 7,
+      "surplus_mw": 0.0,
+      "demand_mw": 570.1,
+      "renewable_mw": 105.2,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 388
+    },
+    {
+      "hour": 8,
+      "surplus_mw": 1.9,
+      "demand_mw": 517.2,
+      "renewable_mw": 180.7,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 323
+    },
+    {
+      "hour": 9,
+      "surplus_mw": 9.7,
+      "demand_mw": 519.0,
+      "renewable_mw": 226.9,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 328
+    },
+    {
+      "hour": 10,
+      "surplus_mw": 41.6,
+      "demand_mw": 491.6,
+      "renewable_mw": 318.8,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 370
+    },
+    {
+      "hour": 11,
+      "surplus_mw": 110.8,
+      "demand_mw": 486.2,
+      "renewable_mw": 335.2,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 419
+    },
+    {
+      "hour": 12,
+      "surplus_mw": 118.2,
+      "demand_mw": 482.2,
+      "renewable_mw": 327.9,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 432
+    },
+    {
+      "hour": 13,
+      "surplus_mw": 127.9,
+      "demand_mw": 472.2,
+      "renewable_mw": 330.2,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 434
+    },
+    {
+      "hour": 14,
+      "surplus_mw": 123.4,
+      "demand_mw": 477.7,
+      "renewable_mw": 303.1,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 418
+    },
+    {
+      "hour": 15,
+      "surplus_mw": 80.5,
+      "demand_mw": 490.0,
+      "renewable_mw": 294.7,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 60.0,
+      "idle_ev_count": 412
+    },
+    {
+      "hour": 16,
+      "surplus_mw": 36.7,
+      "demand_mw": 528.2,
+      "renewable_mw": 272.2,
+      "charge_mwh": 11.413,
+      "discharge_mwh": 0.0,
+      "soc_pct": 90.0,
+      "idle_ev_count": 375
+    },
+    {
+      "hour": 17,
+      "surplus_mw": 2.6,
+      "demand_mw": 597.8,
+      "renewable_mw": 234.9,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 90.0,
+      "idle_ev_count": 326
+    },
+    {
+      "hour": 18,
+      "surplus_mw": 0.0,
+      "demand_mw": 667.6,
+      "renewable_mw": 158.4,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 14.1,
+      "soc_pct": 46.2,
+      "idle_ev_count": 282
+    },
+    {
+      "hour": 19,
+      "surplus_mw": 0.0,
+      "demand_mw": 739.0,
+      "renewable_mw": 135.5,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.0,
+      "soc_pct": 46.2,
+      "idle_ev_count": 286
+    },
+    {
+      "hour": 20,
+      "surplus_mw": 0.0,
+      "demand_mw": 768.9,
+      "renewable_mw": 104.0,
+      "charge_mwh": 0.045,
+      "discharge_mwh": 0.0,
+      "soc_pct": 46.3,
+      "idle_ev_count": 330
+    },
+    {
+      "hour": 21,
+      "surplus_mw": 0.0,
+      "demand_mw": 748.1,
+      "renewable_mw": 74.2,
+      "charge_mwh": 0.0,
+      "discharge_mwh": 0.444,
+      "soc_pct": 45.0,
+      "idle_ev_count": 379
+    },
+    {
+      "hour": 22,
+      "surplus_mw": 0.0,
+      "demand_mw": 760.2,
+      "renewable_mw": 72.1,
+      "charge_mwh": 0.011,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.0,
+      "idle_ev_count": 412
+    },
+    {
+      "hour": 23,
+      "surplus_mw": 0.0,
+      "demand_mw": 760.2,
+      "renewable_mw": 54.8,
+      "charge_mwh": 0.008,
+      "discharge_mwh": 0.0,
+      "soc_pct": 45.0,
+      "idle_ev_count": 430
+    }
+  ],
+  "recommendation": {
+    "best_hours": [
+      3,
+      4,
+      6,
+      16
+    ],
+    "expected_revenue_won": 4510.0,
+    "message": "오전 3시~오후 4시, 잉여전력이 가장 많아요"
+  }
+}

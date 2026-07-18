@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "version": "1.0",
+    "generated_at": "2026-07-19T00:58:39+09:00",
+    "region": "제주",
+    "period": {
+      "start": "2023-01-01",
+      "end": "2023-12-31"
+    },
+    "demo_date": "2023-04-16",
+    "assumptions": {
+      "battery_kwh_per_ev": 70,
+      "charger_kw": 50,
+      "degradation_won_per_kwh": 45,
+      "smp_won_per_kwh": 150,
+      "smp_peak_won_per_kwh": 180,
+      "owner_share": 0.6,
+      "curtail_days_per_month": 8.4,
+      "monthly_curtailment_mwh": 2183.1
+    }
+  },
+  "scenarios": [
+    {
+      "ev_count": 100,
+      "curtailment_avoided_mwh": 23.9,
+      "curtailment_avoided_pct": 1.1,
+      "savings_won": 6931008,
+      "degradation_cost_won": 1115856,
+      "deferred_investment_won": 100336320,
+      "owner_revenue_won_per_ev": 41586,
+      "utilization_pct": 7.4
+    },
+    {
+      "ev_count": 300,
+      "curtailment_avoided_mwh": 62.2,
+      "curtailment_avoided_pct": 2.9,
+      "savings_won": 19255572,
+      "degradation_cost_won": 3306744,
+      "deferred_investment_won": 261389520,
+      "owner_revenue_won_per_ev": 38511,
+      "utilization_pct": 6.4
+    },
+    {
+      "ev_count": 500,
+      "curtailment_avoided_mwh": 100.6,
+      "curtailment_avoided_pct": 4.6,
+      "savings_won": 31580136,
+      "degradation_cost_won": 5497632,
+      "deferred_investment_won": 422442720,
+      "owner_revenue_won_per_ev": 37896,
+      "utilization_pct": 6.2
+    },
+    {
+      "ev_count": 1000,
+      "curtailment_avoided_mwh": 196.5,
+      "curtailment_avoided_pct": 9.0,
+      "savings_won": 62392176,
+      "degradation_cost_won": 10974852,
+      "deferred_investment_won": 825093360,
+      "owner_revenue_won_per_ev": 37435,
+      "utilization_pct": 6.1
+    },
+    {
+      "ev_count": 2000,
+      "curtailment_avoided_mwh": 388.2,
+      "curtailment_avoided_pct": 17.8,
+      "savings_won": 124016256,
+      "degradation_cost_won": 21929292,
+      "deferred_investment_won": 1630394640,
+      "owner_revenue_won_per_ev": 37205,
+      "utilization_pct": 6.0
+    }
+  ]
+}
