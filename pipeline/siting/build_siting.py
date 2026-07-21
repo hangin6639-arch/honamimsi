@@ -30,8 +30,12 @@ W_SURPLUS, W_COMMERCE, W_ACCESS = 0.5, 0.3, 0.2
 
 # 제주 주요 풍력단지(잉여전력 발생원) 좌표 — 동부 구좌·성산, 서부 한경·한림, 남부 표선
 WIND_FARMS = [
-    (126.17, 33.33), (126.24, 33.41), (126.75, 33.55),
-    (126.79, 33.55), (126.90, 33.44), (126.83, 33.32),
+    (126.17, 33.33),
+    (126.24, 33.41),
+    (126.75, 33.55),
+    (126.79, 33.55),
+    (126.90, 33.44),
+    (126.83, 33.32),
 ]
 CITY_CENTERS = [(126.5312, 33.4996), (126.5646, 33.2541)]  # 제주시청, 서귀포시청
 JEJU_BBOX = box(126.14, 33.18, 126.98, 33.58)
@@ -57,19 +61,26 @@ def main() -> None:
     centers = kb.cluster_centers_
 
     # 보로노이: 외곽 무한 셀 방지용 더미 포인트 추가 후 bbox 클리핑
-    pad = [(125.5, 32.7), (125.5, 34.0), (127.6, 32.7), (127.6, 34.0), (126.5, 34.2), (126.5, 32.4)]
+    pad = [
+        (125.5, 32.7),
+        (125.5, 34.0),
+        (127.6, 32.7),
+        (127.6, 34.0),
+        (126.5, 34.2),
+        (126.5, 32.4),
+    ]
     vor = Voronoi(np.vstack([centers, pad]))
 
     counts = df.groupby("cell").size().to_numpy(float)
     surplus = scale100(
-        np.array([
-            -min(km(c[0], c[1], w[0], w[1]) for w in WIND_FARMS) for c in centers
-        ])
+        np.array(
+            [-min(km(c[0], c[1], w[0], w[1]) for w in WIND_FARMS) for c in centers]
+        )
     )
     access = scale100(
-        np.array([
-            -min(km(c[0], c[1], a[0], a[1]) for a in CITY_CENTERS) for c in centers
-        ])
+        np.array(
+            [-min(km(c[0], c[1], a[0], a[1]) for a in CITY_CENTERS) for c in centers]
+        )
     )
     commerce = scale100(counts)
     total = W_SURPLUS * surplus + W_COMMERCE * commerce + W_ACCESS * access
@@ -90,27 +101,34 @@ def main() -> None:
         # 도보권(500m) 가맹점 수
         d = df[df["cell"] == i]
         walk = int((km(d["경도"], d["위도"], centers[i][0], centers[i][1]) <= 0.5).sum())
-        features.append({
-            "type": "Feature",
-            "geometry": mapping(poly),
-            "properties": {
-                "cell_id": f"JJ-{i+1:03d}",
-                "name": str(names[i]),
-                "station_lon": round(float(centers[i][0]), 5),
-                "station_lat": round(float(centers[i][1]), 5),
-                "surplus_score": round(float(surplus[i]), 1),
-                "commerce_score": round(float(commerce[i]), 1),
-                "access_score": round(float(access[i]), 1),
-                "total_score": round(float(total[i]), 1),
-                "rank": int(order[i]),
-                "charger_count": max(2, int(counts[i] // 1500)),  # 추정치(충전소 실데이터 미수집)
-                "merchant_count": walk,
-            },
-        })
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": mapping(poly),
+                "properties": {
+                    "cell_id": f"JJ-{i+1:03d}",
+                    "name": str(names[i]),
+                    "station_lon": round(float(centers[i][0]), 5),
+                    "station_lat": round(float(centers[i][1]), 5),
+                    "surplus_score": round(float(surplus[i]), 1),
+                    "commerce_score": round(float(commerce[i]), 1),
+                    "access_score": round(float(access[i]), 1),
+                    "total_score": round(float(total[i]), 1),
+                    "rank": int(order[i]),
+                    "charger_count": max(
+                        2, int(counts[i] // 1500)
+                    ),  # 추정치(충전소 실데이터 미수집)
+                    "merchant_count": walk,
+                },
+            }
+        )
 
     gj = {
         "type": "FeatureCollection",
-        "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
+        "crs": {
+            "type": "name",
+            "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"},
+        },
         "features": features,
     }
 
@@ -123,12 +141,16 @@ def main() -> None:
     out = DATA / "siting.geojson"
     out.write_text(json.dumps(gj, ensure_ascii=False), encoding="utf-8")
     kb_size = out.stat().st_size / 1024
-    print(f"siting.geojson: 셀 {len(features)}개, {kb_size:.0f} KB (제주 상가 {len(df):,}개 기반)")
+    print(
+        f"siting.geojson: 셀 {len(features)}개, {kb_size:.0f} KB (제주 상가 {len(df):,}개 기반)"
+    )
     top = sorted(gj["features"], key=lambda f: f["properties"]["rank"])[:5]
     for f in top:
         p = f["properties"]
-        print(f"  {p['rank']}위 {p['name']:10s} total {p['total_score']:5.1f} "
-              f"(잉여 {p['surplus_score']:5.1f} / 상권 {p['commerce_score']:5.1f} / 접근 {p['access_score']:5.1f})")
+        print(
+            f"  {p['rank']}위 {p['name']:10s} total {p['total_score']:5.1f} "
+            f"(잉여 {p['surplus_score']:5.1f} / 상권 {p['commerce_score']:5.1f} / 접근 {p['access_score']:5.1f})"
+        )
 
 
 if __name__ == "__main__":
