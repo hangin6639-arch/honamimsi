@@ -36,16 +36,12 @@ def read_csv_any(path, **kw):
 def melt_wide_hours(df: pd.DataFrame, date_col: str, value_name: str) -> pd.DataFrame:
     """날짜 × 1시~24시 wide 형식 → (timestamp, value) long 형식."""
     hour_cols = [c for c in df.columns if re.fullmatch(r"\d+시(간)?", str(c).strip())]
-    m = df.melt(
-        id_vars=[date_col], value_vars=hour_cols, var_name="h", value_name=value_name
-    )
+    m = df.melt(id_vars=[date_col], value_vars=hour_cols, var_name="h", value_name=value_name)
     m["h"] = m["h"].str.extract(r"(\d+)").astype(int) - 1
     m[value_name] = pd.to_numeric(
         m[value_name].astype(str).str.replace(",", ""), errors="coerce"
     )
-    m["ts"] = pd.to_datetime(m[date_col], errors="coerce") + pd.to_timedelta(
-        m["h"], unit="h"
-    )
+    m["ts"] = pd.to_datetime(m[date_col], errors="coerce") + pd.to_timedelta(m["h"], unit="h")
     return m.dropna(subset=["ts"])[["ts", value_name]]
 
 
