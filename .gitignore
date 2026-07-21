@@ -1,0 +1,15 @@
+# 의존성·빌드 산출물 (재생성 가능)
+node_modules/
+dist/
+pipeline/.venv/
+pipeline/out/
+__pycache__/
+
+# 수집 원본 대용량 데이터 — 필요 시 주석 처리해 포함 (전부 100MB 미만이라 포함도 가능)
+pipeline/raw/sanggwon_*.csv
+pipeline/raw/regional_solar_*.csv
+pipeline/raw/weather/
+
+# 로컬 설정
+.claude/
+*.log

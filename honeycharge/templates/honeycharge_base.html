@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}꿀차지{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        honey: '#ffcd4a',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Leaflet CSS for wallet map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #fffbf0 0%, #fff8e1 100%);
+        }
+        .mobile-card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="pb-20">
+    <!-- Mobile App Header -->
+    <header class="bg-honey shadow-md sticky top-0 z-50">
+        <div class="px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="text-4xl">🍯</span>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">꿀차지</h1>
+                        <p class="text-xs text-gray-700">주차하고 꿀 받으세요</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-700">누적 꿀</p>
+                    <p class="text-xl font-bold text-gray-900">12,580 꿀</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-honey shadow-lg">
+        <div class="flex justify-around items-center h-16">
+            <a href="{% url 'honeycharge:home' %}" class="flex flex-col items-center space-y-1 text-gray-600 hover:text-honey {% if request.resolver_match.url_name == 'home' %}text-honey{% endif %}">
+                <span class="text-2xl">🏠</span>
+                <span class="text-xs font-medium">홈</span>
+            </a>
+            <a href="{% url 'honeycharge:earnings' %}" class="flex flex-col items-center space-y-1 text-gray-600 hover:text-honey {% if request.resolver_match.url_name == 'earnings' %}text-honey{% endif %}">
+                <span class="text-2xl">📊</span>
+                <span class="text-xs font-medium">수익</span>
+            </a>
+            <a href="{% url 'honeycharge:wallet' %}" class="flex flex-col items-center space-y-1 text-gray-600 hover:text-honey {% if request.resolver_match.url_name == 'wallet' %}text-honey{% endif %}">
+                <span class="text-2xl">💰</span>
+                <span class="text-xs font-medium">꿀지갑</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

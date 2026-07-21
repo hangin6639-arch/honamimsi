@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}HoneyComb - 정부 대시보드{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Hero Section -->
+    <div class="bg-white rounded-lg shadow-lg p-8 border-l-4 border-honey">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">🍯 HoneyComb V2G 플랫폼</h1>
+        <p class="text-xl text-gray-600">제주·호남 재생에너지 출력제어 문제 해결을 위한 V2G 충·방전 스케줄링 시스템</p>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-lg shadow p-6 border-t-4 border-honey">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">출력제어 회피량</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">1,250 MWh</p>
+                    <p class="text-green-600 text-sm mt-1">↑ 연간 15-20% 감소</p>
+                </div>
+                <div class="text-4xl">⚡</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 border-t-4 border-honey">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">경제적 효과</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">52억원</p>
+                    <p class="text-green-600 text-sm mt-1">연간 예상 절감액</p>
+                </div>
+                <div class="text-4xl">💰</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 border-t-4 border-honey">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">참여 전기차</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">500대</p>
+                    <p class="text-blue-600 text-sm mt-1">시나리오 기준</p>
+                </div>
+                <div class="text-4xl">🚗</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 border-t-4 border-honey">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">차주 월평균 수익</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">4만원</p>
+                    <p class="text-green-600 text-sm mt-1">배터리 열화 고려</p>
+                </div>
+                <div class="text-4xl">💳</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href="{% url 'dashboard:map' %}" class="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow border-l-4 border-honey">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold text-gray-900">입지 지도</h2>
+                <span class="text-5xl">🗺️</span>
+            </div>
+            <p class="text-gray-600">보로노이 셀 기반 V2G 입지 적합도 분석</p>
+            <p class="text-sm text-honey font-semibold mt-4">→ 지도 보기</p>
+        </a>
+
+        <a href="{% url 'dashboard:schedule' %}" class="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow border-l-4 border-honey">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold text-gray-900">충·방전 스케줄</h2>
+                <span class="text-5xl">📊</span>
+            </div>
+            <p class="text-gray-600">MILP 최적화 기반 시간별 스케줄링</p>
+            <p class="text-sm text-honey font-semibold mt-4">→ 스케줄 보기</p>
+        </a>
+    </div>
+
+    <!-- Project Overview -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">프로젝트 개요</h2>
+        <div class="prose max-w-none text-gray-700">
+            <p class="mb-4">
+                <strong>HoneyComb</strong>은 제주·호남 지역의 재생에너지 출력제어 문제를 해결하기 위한
+                데이터 기반 V2G(Vehicle-to-Grid) 스케줄링 플랫폼입니다.
+            </p>
+            <ul class="list-disc pl-6 space-y-2">
+                <li><strong>AI 예측:</strong> LightGBM/XGBoost로 발전량·수요·유휴시간 예측</li>
+                <li><strong>MILP 최적화:</strong> 배터리 열화비용 고려한 충·방전 스케줄 최적화</li>
+                <li><strong>입지 분석:</strong> QGIS 기반 보로노이 셀 적합도 분석</li>
+                <li><strong>Claude AI:</strong> 생성형 AI 기반 정책 브리핑 자동 생성</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

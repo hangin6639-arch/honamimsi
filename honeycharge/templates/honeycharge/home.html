@@ -1,0 +1,105 @@
+{% extends "honeycharge_base.html" %}
+
+{% block title %}꿀차지 - 홈{% endblock %}
+
+{% block content %}
+<div class="space-y-4">
+    <!-- Today's Optimal Participation -->
+    <div class="mobile-card bg-white rounded-2xl p-6 border-2 border-honey">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-gray-900">오늘의 최적 참여시간</h2>
+            <span class="text-3xl">⚡</span>
+        </div>
+        <div class="bg-honey bg-opacity-20 rounded-xl p-4 mb-4">
+            <div class="text-center">
+                <p class="text-sm text-gray-700 mb-2">추천 방전 시간</p>
+                <p class="text-4xl font-bold text-gray-900 mb-1">18:00 ~ 21:00</p>
+                <p class="text-sm text-gray-600">피크 시간대 최적</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-4">
+            <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">예상 수익</p>
+                <p class="text-xl font-bold text-honey">1,850꿀</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">예상 방전량</p>
+                <p class="text-xl font-bold text-blue-600">12.5 kWh</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Status -->
+    <div class="mobile-card bg-white rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">내 차량 상태</h2>
+        <div class="space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-gray-600">현재 배터리</span>
+                <span class="text-lg font-bold text-green-600">85%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-green-500 h-3 rounded-full" style="width: 85%"></div>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-500">다음 운행까지</span>
+                <span class="font-semibold text-gray-700">5시간 30분</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Schedule -->
+    <div class="mobile-card bg-white rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">오늘의 스케줄</h2>
+        <div class="space-y-3">
+            <div class="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
+                <div class="text-2xl">⚡</div>
+                <div class="flex-1">
+                    <p class="font-semibold text-gray-900">충전</p>
+                    <p class="text-sm text-gray-600">12:00 ~ 15:00 (잉여전력 활용)</p>
+                </div>
+                <span class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">진행중</span>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div class="text-2xl">🔋</div>
+                <div class="flex-1">
+                    <p class="font-semibold text-gray-900">방전</p>
+                    <p class="text-sm text-gray-600">18:00 ~ 21:00 (피크 시간)</p>
+                </div>
+                <span class="text-xs bg-gray-400 text-white px-2 py-1 rounded-full">예정</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Summary -->
+    <div class="mobile-card bg-gradient-to-r from-honey to-yellow-300 rounded-2xl p-6 text-gray-900">
+        <h2 class="text-lg font-bold mb-4">이번 주 요약</h2>
+        <div class="grid grid-cols-3 gap-3">
+            <div class="text-center">
+                <p class="text-2xl font-bold">6회</p>
+                <p class="text-xs mt-1">참여</p>
+            </div>
+            <div class="text-center">
+                <p class="text-2xl font-bold">8,340</p>
+                <p class="text-xs mt-1">꿀 획득</p>
+            </div>
+            <div class="text-center">
+                <p class="text-2xl font-bold">42.5</p>
+                <p class="text-xs mt-1">kWh 기여</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Banner -->
+    <div class="mobile-card bg-white rounded-2xl p-6 border-2 border-dashed border-honey">
+        <div class="text-center">
+            <span class="text-4xl mb-2 block">🎁</span>
+            <p class="font-bold text-gray-900 mb-2">이번 달 누적 5만 꿀 달성 시</p>
+            <p class="text-sm text-gray-600 mb-3">스타벅스 커피 쿠폰 증정!</p>
+            <div class="bg-gray-100 rounded-full h-2 mb-2">
+                <div class="bg-honey h-2 rounded-full" style="width: 25%"></div>
+            </div>
+            <p class="text-xs text-gray-500">12,580 / 50,000 꿀</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

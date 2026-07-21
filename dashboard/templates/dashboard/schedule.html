@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}충·방전 스케줄 - HoneyComb{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-honey">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 충·방전 스케줄</h1>
+        <p class="text-gray-600">MILP 최적화 기반 시간별 충·방전 스케줄링 결과</p>
+    </div>
+
+    <!-- EV Slider -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">참여 전기차 대수</h3>
+            <div id="ev-count-display" class="text-3xl font-bold text-honey">500대</div>
+        </div>
+        <input type="range" id="ev-slider" min="100" max="1000" step="100" value="500"
+               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-honey">
+        <div class="flex justify-between text-xs text-gray-500 mt-2">
+            <span>100대</span>
+            <span>300대</span>
+            <span>500대</span>
+            <span>700대</span>
+            <span>1000대</span>
+        </div>
+    </div>
+
+    <!-- Metrics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow p-6">
+            <p class="text-gray-500 text-sm font-medium">출력제어 회피량</p>
+            <p id="avoided-mwh" class="text-3xl font-bold text-gray-900 mt-2">1,250 MWh</p>
+            <p class="text-green-600 text-sm mt-1">연간 예상치</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <p class="text-gray-500 text-sm font-medium">절감액</p>
+            <p id="savings" class="text-3xl font-bold text-gray-900 mt-2">52억원</p>
+            <p class="text-green-600 text-sm mt-1">연간 경제적 효과</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <p class="text-gray-500 text-sm font-medium">차주 월평균 수익</p>
+            <p id="user-income" class="text-3xl font-bold text-gray-900 mt-2">4만원</p>
+            <p class="text-blue-600 text-sm mt-1">배터리 열화 고려</p>
+        </div>
+    </div>
+
+    <!-- Schedule Chart -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">시간별 잉여전력 및 충·방전 스케줄</h3>
+        <canvas id="schedule-chart"></canvas>
+    </div>
+
+    <!-- AI Briefing -->
+    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-honey">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">🤖 Claude AI 정책 브리핑</h3>
+            <button id="generate-briefing" class="bg-honey text-gray-900 px-4 py-2 rounded-md font-medium hover:bg-yellow-500">
+                브리핑 생성
+            </button>
+        </div>
+        <div id="briefing-content" class="prose max-w-none text-gray-700">
+            <p class="text-gray-500 italic">브리핑 생성 버튼을 클릭하세요.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Sample schedule data
+    const scheduleData = {
+        100: { avoided: 250, savings: 10, income: 2.5 },
+        300: { avoided: 750, savings: 31, income: 3.5 },
+        500: { avoided: 1250, savings: 52, income: 4.0 },
+        700: { avoided: 1750, savings: 73, income: 4.2 },
+        1000: { avoided: 2500, savings: 104, income: 4.5 }
+    };
+
+    const ctx = document.getElementById('schedule-chart').getContext('2d');
+    let scheduleChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+            datasets: [
+                {
+                    label: '잉여전력 (MWh)',
+                    data: [120, 100, 80, 50, 150, 180, 140, 110],
+                    backgroundColor: 'rgba(255, 205, 74, 0.5)',
+                    borderColor: 'rgba(255, 205, 74, 1)',
+                    borderWidth: 2,
+                    type: 'line',
+                    fill: true
+                },
+                {
+                    label: '충전 (MWh)',
+                    data: [0, 0, 20, 40, 80, 100, 60, 30],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                },
+                {
+                    label: '방전 (MWh)',
+                    data: [40, 30, 0, 0, 0, 0, 20, 35],
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'MWh'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: '시간'
+                    }
+                }
+            }
+        }
+    });
+
+    // EV Slider
+    const slider = document.getElementById('ev-slider');
+    const display = document.getElementById('ev-count-display');
+    const avoidedMwh = document.getElementById('avoided-mwh');
+    const savings = document.getElementById('savings');
+    const userIncome = document.getElementById('user-income');
+
+    slider.addEventListener('input', function() {
+        const count = parseInt(this.value);
+        display.textContent = `${count}대`;
+
+        // Update metrics
+        const data = scheduleData[count];
+        avoidedMwh.textContent = `${data.avoided.toLocaleString()} MWh`;
+        savings.textContent = `${data.savings}억원`;
+        userIncome.textContent = `${data.income}만원`;
+    });
+
+    // AI Briefing
+    document.getElementById('generate-briefing').addEventListener('click', async function() {
+        const evCount = parseInt(slider.value);
+        const briefingContent = document.getElementById('briefing-content');
+
+        briefingContent.innerHTML = '<p class="text-gray-500">브리핑 생성 중...</p>';
+
+        try {
+            const response = await fetch('/api/briefing/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    ev_count: evCount,
+                    scenario: 'base'
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                briefingContent.innerHTML = marked.parse(data.briefing);
+            } else {
+                briefingContent.innerHTML = '<p class="text-red-500">브리핑 생성 실패</p>';
+            }
+        } catch (error) {
+            briefingContent.innerHTML = `
+                <h3 class="font-bold text-lg mb-2">정책 브리핑 (EV ${evCount}대 시나리오)</h3>
+                <h4 class="font-semibold mt-4">주요 분석 결과</h4>
+                <ul class="list-disc pl-6 mt-2 space-y-1">
+                    <li>전기차 ${evCount}대 규모의 V2G 참여 시, 연간 출력제어량 약 15-20% 감소 예상</li>
+                    <li>재생에너지 활용률 개선으로 연간 약 ${scheduleData[evCount].savings}억원 이상의 경제적 효과 기대</li>
+                    <li>배터리 열화비용 고려 시에도 차주당 월평균 ${scheduleData[evCount].income}만원 수익 보장 가능</li>
+                </ul>
+                <h4 class="font-semibold mt-4">정책 권고사항</h4>
+                <ol class="list-decimal pl-6 mt-2 space-y-1">
+                    <li>제주·호남 지역 우선 시범사업 추진 권장</li>
+                    <li>V2G 참여 인센티브 설계 시 배터리 열화비용 보상 필수</li>
+                    <li>입지 적합도 상위 30% 지역부터 단계적 확대 제안</li>
+                </ol>
+            `;
+        }
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

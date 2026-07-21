@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}입지 지도 - HoneyComb{% endblock %}
+
+{% block extra_head %}
+<style>
+    #map {
+        height: 600px;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-honey">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">🗺️ V2G 입지 적합도 지도</h1>
+        <p class="text-gray-600">보로노이 셀 기반 입지 분석 결과 (QGIS → GeoJSON)</p>
+    </div>
+
+    <!-- Map Legend -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">적합도 점수 범례</h3>
+        <div class="flex flex-wrap gap-4">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-red-500 rounded"></div>
+                <span class="text-sm text-gray-700">낮음 (0-25)</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-yellow-500 rounded"></div>
+                <span class="text-sm text-gray-700">보통 (26-50)</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-lime-500 rounded"></div>
+                <span class="text-sm text-gray-700">높음 (51-75)</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded" style="background-color: #ffcd4a;"></div>
+                <span class="text-sm text-gray-700">매우 높음 (76-100)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Info Panel -->
+    <div id="info-panel" class="bg-white rounded-lg shadow p-6 hidden">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">선택된 셀 정보</h3>
+        <div id="cell-info" class="space-y-2 text-sm text-gray-700"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Initialize map centered on South Korea (Jeju/Honam region)
+    const map = L.map('map').setView([33.5, 126.5], 9);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Color scale based on total_score
+    function getColor(score) {
+        return score > 75 ? '#ffcd4a' :
+               score > 50 ? '#84cc16' :
+               score > 25 ? '#eab308' :
+                            '#ef4444';
+    }
+
+    function style(feature) {
+        return {
+            fillColor: getColor(feature.properties.total_score || 50),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            fillOpacity: 0.7
+        };
+    }
+
+    function highlightFeature(e) {
+        const layer = e.target;
+        layer.setStyle({
+            weight: 4,
+            color: '#666',
+            fillOpacity: 0.9
+        });
+        layer.bringToFront();
+    }
+
+    function resetHighlight(e) {
+        geojsonLayer.resetStyle(e.target);
+    }
+
+    function showCellInfo(e) {
+        const props = e.target.feature.properties;
+        const infoPanel = document.getElementById('info-panel');
+        const cellInfo = document.getElementById('cell-info');
+
+        cellInfo.innerHTML = `
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="font-semibold text-gray-900">총 적합도 점수</p>
+                    <p class="text-2xl font-bold text-honey">${props.total_score || 'N/A'}</p>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-900">셀 ID</p>
+                    <p class="text-lg">${props.cell_id || 'N/A'}</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="space-y-3">
+                <div>
+                    <p class="font-medium text-gray-700">잉여전력 점수</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="flex-1 bg-gray-200 rounded-full h-2">
+                            <div class="bg-honey h-2 rounded-full" style="width: ${props.surplus_score || 0}%"></div>
+                        </div>
+                        <span class="text-sm font-semibold">${props.surplus_score || 0}</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-700">상권 밀집도 점수</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="flex-1 bg-gray-200 rounded-full h-2">
+                            <div class="bg-honey h-2 rounded-full" style="width: ${props.commerce_score || 0}%"></div>
+                        </div>
+                        <span class="text-sm font-semibold">${props.commerce_score || 0}</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-700">접근성 점수</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="flex-1 bg-gray-200 rounded-full h-2">
+                            <div class="bg-honey h-2 rounded-full" style="width: ${props.access_score || 0}%"></div>
+                        </div>
+                        <span class="text-sm font-semibold">${props.access_score || 0}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        infoPanel.classList.remove('hidden');
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: showCellInfo
+        });
+    }
+
+    // Load GeoJSON data
+    // For demo purposes, create sample data. Replace with actual data load from /static/data/siting.geojson
+    const sampleGeoJSON = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "cell_id": "CELL_001",
+                    "surplus_score": 85,
+                    "commerce_score": 72,
+                    "access_score": 90,
+                    "total_score": 82
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [126.4, 33.4],
+                        [126.5, 33.4],
+                        [126.5, 33.5],
+                        [126.4, 33.5],
+                        [126.4, 33.4]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "cell_id": "CELL_002",
+                    "surplus_score": 45,
+                    "commerce_score": 38,
+                    "access_score": 52,
+                    "total_score": 45
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [126.5, 33.4],
+                        [126.6, 33.4],
+                        [126.6, 33.5],
+                        [126.5, 33.5],
+                        [126.5, 33.4]
+                    ]]
+                }
+            }
+        ]
+    };
+
+    const geojsonLayer = L.geoJSON(sampleGeoJSON, {
+        style: style,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+    // TODO: Replace with actual data loading
+    // fetch('/static/data/siting.geojson')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         const geojsonLayer = L.geoJSON(data, {
+    //             style: style,
+    //             onEachFeature: onEachFeature
+    //         }).addTo(map);
+    //     });
+</script>
+{% endblock %}

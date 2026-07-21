@@ -1,0 +1,187 @@
+{% extends "honeycharge_base.html" %}
+
+{% block title %}꿀차지 - 꿀지갑{% endblock %}
+
+{% block extra_head %}
+<style>
+    #wallet-map {
+        height: 300px;
+        border-radius: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-4">
+    <!-- Honey Balance -->
+    <div class="mobile-card bg-gradient-to-r from-honey to-yellow-300 rounded-2xl p-6 text-gray-900">
+        <div class="flex items-center justify-between mb-2">
+            <p class="text-sm">내 꿀 잔액</p>
+            <span class="text-3xl">🍯</span>
+        </div>
+        <p class="text-5xl font-bold mb-4">12,580 꿀</p>
+        <div class="flex space-x-3">
+            <button class="flex-1 bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-900 font-semibold py-3 rounded-lg transition">
+                충전하기
+            </button>
+            <button class="flex-1 bg-gray-900 bg-opacity-80 hover:bg-opacity-100 text-white font-semibold py-3 rounded-lg transition">
+                사용하기
+            </button>
+        </div>
+    </div>
+
+    <!-- Rewards -->
+    <div class="mobile-card bg-white rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">사용 가능한 혜택</h2>
+        <div class="space-y-3">
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+                <div class="text-4xl">☕</div>
+                <div class="flex-1">
+                    <p class="font-semibold text-gray-900">스타벅스 아메리카노</p>
+                    <p class="text-sm text-gray-600">5,000 꿀</p>
+                </div>
+                <button class="bg-honey text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-500">
+                    교환
+                </button>
+            </div>
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+                <div class="text-4xl">🍔</div>
+                <div class="flex-1">
+                    <p class="font-semibold text-gray-900">맥도날드 빅맥 세트</p>
+                    <p class="text-sm text-gray-600">8,000 꿀</p>
+                </div>
+                <button class="bg-honey text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-500">
+                    교환
+                </button>
+            </div>
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+                <div class="text-4xl">🅿️</div>
+                <div class="flex-1">
+                    <p class="font-semibold text-gray-900">주차권 1시간</p>
+                    <p class="text-sm text-gray-600">2,000 꿀</p>
+                </div>
+                <button class="bg-honey text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-500">
+                    교환
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Coupons -->
+    <div class="mobile-card bg-white rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">내 쿠폰함</h2>
+        <div class="space-y-3">
+            <div class="border-2 border-dashed border-honey rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="bg-honey px-3 py-1 rounded-full text-xs font-semibold">사용가능</span>
+                    <span class="text-xs text-gray-500">~ 2024.08.20</span>
+                </div>
+                <p class="font-semibold text-gray-900 mb-1">스타벅스 아메리카노 (Tall)</p>
+                <p class="text-xs text-gray-600">제주시 전 지점 사용 가능</p>
+            </div>
+            <div class="border-2 border-dashed border-honey rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="bg-honey px-3 py-1 rounded-full text-xs font-semibold">사용가능</span>
+                    <span class="text-xs text-gray-500">~ 2024.08.15</span>
+                </div>
+                <p class="font-semibold text-gray-900 mb-1">주차권 2시간</p>
+                <p class="text-xs text-gray-600">제휴 주차장 사용 가능</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nearby Stores Map -->
+    <div class="mobile-card bg-white rounded-2xl p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">주변 가맹점 및 충전소</h2>
+        <div id="wallet-map" class="mb-4"></div>
+        <div class="space-y-2">
+            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span>☕</span>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">스타벅스 제주중앙점</p>
+                    <p class="text-xs text-gray-500">도보 5분 • 0.4km</p>
+                </div>
+                <button class="text-honey text-sm font-semibold">길찾기</button>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <span>⚡</span>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">V2G 충전소 A</p>
+                    <p class="text-xs text-gray-500">도보 3분 • 0.2km</p>
+                </div>
+                <button class="text-honey text-sm font-semibold">길찾기</button>
+            </div>
+            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <span>🅿️</span>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">제휴 주차장 B</p>
+                    <p class="text-xs text-gray-500">도보 7분 • 0.6km</p>
+                </div>
+                <button class="text-honey text-sm font-semibold">길찾기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Info -->
+    <div class="mobile-card bg-white rounded-2xl p-6 border-2 border-dashed border-honey">
+        <div class="text-center">
+            <span class="text-4xl mb-3 block">🎁</span>
+            <h3 class="font-bold text-gray-900 mb-2">꿀 적립 혜택</h3>
+            <ul class="text-sm text-gray-700 space-y-2 text-left mt-4">
+                <li class="flex items-start space-x-2">
+                    <span class="text-honey">•</span>
+                    <span>V2G 방전 참여 시 1kWh당 <strong>100꿀</strong> 적립</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                    <span class="text-honey">•</span>
+                    <span>월 누적 참여 10회 이상 시 <strong>보너스 500꿀</strong></span>
+                </li>
+                <li class="flex items-start space-x-2">
+                    <span class="text-honey">•</span>
+                    <span>친구 추천 시 <strong>1,000꿀</strong> 지급</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Initialize wallet map
+    const map = L.map('wallet-map').setView([33.5, 126.5], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Add sample markers
+    const cafeIcon = L.divIcon({
+        html: '<div style="background: #ffcd4a; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">☕</div>',
+        className: '',
+        iconSize: [30, 30]
+    });
+
+    const chargerIcon = L.divIcon({
+        html: '<div style="background: #3b82f6; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: white;">⚡</div>',
+        className: '',
+        iconSize: [30, 30]
+    });
+
+    L.marker([33.502, 126.505], {icon: cafeIcon}).addTo(map)
+        .bindPopup('<b>스타벅스 제주중앙점</b><br>도보 5분');
+
+    L.marker([33.500, 126.502], {icon: chargerIcon}).addTo(map)
+        .bindPopup('<b>V2G 충전소 A</b><br>도보 3분');
+
+    L.marker([33.498, 126.508], {icon: chargerIcon}).addTo(map)
+        .bindPopup('<b>V2G 충전소 B</b><br>도보 7분');
+</script>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}시나리오 비교 - HoneyComb{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-honey">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">⚖️ 정책 시나리오 비교</h1>
+        <p class="text-gray-600">다양한 정책 시나리오별 비용/편익 분석</p>
+    </div>
+
+    <!-- Scenario Comparison Table -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">시나리오별 주요 지표 비교</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">시나리오</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">EV 대수</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">출력제어 회피량</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">연간 절감액</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">차주 월수익</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">투자 이연액</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">보수적</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">100대</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">250 MWh</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10억원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2.5만원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5억원</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">점진적</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">300대</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">750 MWh</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">31억원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3.5만원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15억원</td>
+                    </tr>
+                    <tr class="bg-honey bg-opacity-20 hover:bg-opacity-30">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">기본 (권장)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">500대</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">1,250 MWh</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">52억원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">4.0만원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">25억원</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">적극적</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">700대</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,750 MWh</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">73억원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.2만원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">35억원</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">공격적</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,000대</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2,500 MWh</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">104억원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4.5만원</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">50억원</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Cost-Benefit Chart -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">시나리오별 비용/편익 분석</h3>
+        <canvas id="scenario-chart"></canvas>
+    </div>
+
+    <!-- Recommendation -->
+    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-honey">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">📋 권고사항</h3>
+        <div class="prose max-w-none text-gray-700">
+            <p><strong>기본 시나리오 (500대)</strong>를 권장합니다:</p>
+            <ul class="list-disc pl-6 mt-2 space-y-2">
+                <li><strong>경제성:</strong> 연간 52억원 절감으로 투자대비 가장 높은 ROI</li>
+                <li><strong>실현가능성:</strong> 제주·호남 지역 등록 EV의 약 5-7% 수준으로 참여 유도 가능</li>
+                <li><strong>차주 편익:</strong> 월 4만원 수익으로 참여 인센티브 충분</li>
+                <li><strong>확장성:</strong> 시범사업 성공 시 700-1,000대 규모로 단계적 확대 가능</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const ctx = document.getElementById('scenario-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['보수적', '점진적', '기본', '적극적', '공격적'],
+            datasets: [
+                {
+                    label: '연간 절감액 (억원)',
+                    data: [10, 31, 52, 73, 104],
+                    backgroundColor: 'rgba(255, 205, 74, 0.8)',
+                    borderColor: 'rgba(255, 205, 74, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: '투자 이연액 (억원)',
+                    data: [5, 15, 25, 35, 50],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: '금액 (억원)'
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
