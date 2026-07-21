@@ -52,11 +52,17 @@ def simulate_idle(df: pd.DataFrame, seed=42) -> pd.Series:
     """
     rng = np.random.default_rng(seed)
     h = df["hour"].to_numpy()
-    base = 0.88 - 0.30 * np.exp(-((h - 8.5) ** 2) / 4) - 0.28 * np.exp(-((h - 18.5) ** 2) / 5)
+    base = (
+        0.88
+        - 0.30 * np.exp(-((h - 8.5) ** 2) / 4)
+        - 0.28 * np.exp(-((h - 18.5) ** 2) / 5)
+    )
     base = base - 0.06 * np.sin((h - 12) / 24 * 2 * np.pi)
     base = np.where(df["is_weekend"].to_numpy() == 1, base * 0.96 + 0.02, base)
     base = base + 0.03 * (df["cloud_jeju"].to_numpy() / 100)
-    return pd.Series(np.clip(base + rng.normal(0, 0.025, len(df)), 0.3, 0.98), index=df.index)
+    return pd.Series(
+        np.clip(base + rng.normal(0, 0.025, len(df)), 0.3, 0.98), index=df.index
+    )
 
 
 def main() -> None:
@@ -74,10 +80,18 @@ def main() -> None:
 
         cand = {
             "LightGBM": lgb.LGBMRegressor(
-                n_estimators=600, learning_rate=0.05, num_leaves=63, verbose=-1, random_state=42
+                n_estimators=600,
+                learning_rate=0.05,
+                num_leaves=63,
+                verbose=-1,
+                random_state=42,
             ),
             "XGBoost": xgb.XGBRegressor(
-                n_estimators=600, learning_rate=0.05, max_depth=7, verbosity=0, random_state=42
+                n_estimators=600,
+                learning_rate=0.05,
+                max_depth=7,
+                verbosity=0,
+                random_state=42,
             ),
         }
         metrics[target] = {}
@@ -87,15 +101,24 @@ def main() -> None:
             pred = model.predict(Xte)
             if target != "curtail_mwh":  # 제어량 외에는 음수 없음
                 pred = np.clip(pred, 0, None)
-            m = {"mape": round(mape(yte, pred), 2), "r2": round(float(r2_score(yte, pred)), 4)}
+            m = {
+                "mape": round(mape(yte, pred), 2),
+                "r2": round(float(r2_score(yte, pred)), 4),
+            }
             metrics[target][name] = m
             if m["r2"] > best_r2:
                 best_name, best_r2 = name, m["r2"]
         metrics[target]["best"] = best_name
         models[target] = cand[best_name]
-        print(f"{target:12s} test={len(te):6d}  " + "  ".join(
-            f"{k}: MAPE {v['mape']:6.2f}% R2 {v['r2']:.3f}" for k, v in metrics[target].items() if k != "best"
-        ) + f"  -> {best_name}")
+        print(
+            f"{target:12s} test={len(te):6d}  "
+            + "  ".join(
+                f"{k}: MAPE {v['mape']:6.2f}% R2 {v['r2']:.3f}"
+                for k, v in metrics[target].items()
+                if k != "best"
+            )
+            + f"  -> {best_name}"
+        )
 
     # ---- 시연 대표일: 테스트 구간(제어 데이터 있는 최근 20%) 중 일간 제어량 최대일
     d = df.dropna(subset=["curtail_mwh"])
